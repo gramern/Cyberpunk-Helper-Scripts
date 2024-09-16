@@ -164,7 +164,7 @@ if defined redscript_missing (
     )
 ) 
 :: Search for red4ext framework mod DLL files and check their versions
-set "dll_files=RED4ext.dll ArchiveXL.dll TweakXL.dll Codeware.dll"
+set "dll_files=RED4ext.dll ArchiveXL.dll TweakXL.dll Codeware.dll dlss-enabler-bridge-2077.dll"
 
 for %%D in (%dll_files%) do (
     set "dll_version="
