@@ -186,6 +186,29 @@ for %%D in (%dll_files%) do (
     )
 )
 
+:: Search for DLSS Enabler's DLLs and check versions
+set "dlss_enabler_files=dlss-enabler.dll"
+
+for %%D in (%dlss_enabler_files%) do (
+    set "dll_version="
+    set "dll_found="
+    for /R "%CYBERPUNKDIR%\bin\x64" %%F in ("*%%D") do (
+        for /f "delims=" %%a in ('powershell -Command "$versionInfo = Get-Command '%%F' | ForEach-Object { $_.FileVersionInfo.ProductVersion }; if ($versionInfo) { Write-Output $versionInfo }"') do (
+            set "dll_version=%%a"
+            set "dll_found=1"
+        )
+    )
+    if not defined dll_found (
+        if defined dll_not_found (
+            set "dll_not_found=!dll_not_found!, %%~nD"
+        ) else (
+            set "dll_not_found=%%~nD"
+        )
+    ) else (
+        echo %%~nD Version: !dll_version! >> "%output_file%"
+    )
+)
+
 :: if any core mod dlls or CET are not found, display an alert and write to the output file
 if defined dll_not_found (
     echo The following framework mods are not detected: %dll_not_found% >> "%output_file%"
