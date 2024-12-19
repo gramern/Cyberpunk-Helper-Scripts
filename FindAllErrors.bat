@@ -97,13 +97,18 @@ break > "%output_file%"
 
 :: Set the path to the cyberpunk exe 
 set "exe_path=%CYBERPUNKDIR%\bin\x64\Cyberpunk2077.exe"
-:: Get exe version using wmic datafile command because it works
-for /f "tokens=2 delims==" %%a in ('wmic datafile where name^="!exe_path:\=\\!" get version /value') do (
-    for /f "delims=" %%b in ("%%a") do set "version=%%b"
-)      
+:: Original wmic command replaced with PowerShell
+set "exe_path=%CYBERPUNKDIR%\bin\x64\Cyberpunk2077.exe"
+for /f "delims=" %%a in ('powershell -Command "$file = Get-ItemProperty '%exe_path%'; $file.VersionInfo.ProductVersion"') do (
+    set "version=%%a"
+) 
 
 :: update executable version here
-set LATESTVERSION=3.0.78.41888
+set LATESTVERSION=2.2
+
+echo Detected game version: !version!
+echo Expected version: %LATESTVERSION%
+echo. 
 
 :: if not the current game version, yell at the user and deploy R.A.B.I.D.S.
 if not "!version!"=="%LATESTVERSION%" (
