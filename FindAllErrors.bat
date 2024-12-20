@@ -100,19 +100,23 @@ set "exe_path=%CYBERPUNKDIR%\bin\x64\Cyberpunk2077.exe"
 :: Original wmic command replaced with PowerShell
 set "exe_path=%CYBERPUNKDIR%\bin\x64\Cyberpunk2077.exe"
 for /f "delims=" %%a in ('powershell -Command "$file = Get-ItemProperty '%exe_path%'; $file.VersionInfo.ProductVersion"') do (
-    set "version=%%a"
-) 
+    set "productversion=%%a"
+)
+for /f "delims=" %%a in ('powershell -Command "$v = (Get-ItemProperty '%exe_path%').VersionInfo.FileVersionRaw; '{0}.{1}.{2}.{3}' -f $v.Major,$v.Minor,$v.Build,$v.Revision"') do (
+    set "fileversion=%%a"
+)
 
 :: update executable version here
-set LATESTVERSION=2.2
+set LATESTPRODUCTVERSION=2.2
+set LATESTFILEVERSION=3.0.78.41888
 
-echo Detected game version: !version!
-echo Expected version: %LATESTVERSION%
+echo Detected game version: !productversion! (!fileversion!)
+echo Expected version: %LATESTPRODUCTVERSION% (%LATESTFILEVERSION%)
 echo. 
 
 :: if not the current game version, yell at the user and deploy R.A.B.I.D.S.
-if not "!version!"=="%LATESTVERSION%" (
-  echo Please update the game before proceeding. The most recent game version is 2.2 with the executable version %LATESTVERSION%
+if not "!productversion!"=="%LATESTPRODUCTVERSION%" (
+  echo Please update the game before proceeding. The most recent game version is 2.2 with the executable version %LATESTPRODUCTVERSION%
   echo.
   echo Deploying Roving Autonomous Bartmoss Interface Drones....
   FOR /L %%S IN (10, -1, 1) DO (
@@ -124,7 +128,7 @@ if not "!version!"=="%LATESTVERSION%" (
 )
 
 :: Append version info to the output file
-echo Version: !version! > "%output_file%"
+echo Version: !productversion! (!fileversion!) > "%output_file%"
 
 :: get CET Version from the log file 
 set "cet_log=%CYBERPUNKDIR%\bin\x64\plugins\cyber_engine_tweaks\cyber_engine_tweaks.log"
