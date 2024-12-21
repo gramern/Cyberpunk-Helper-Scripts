@@ -106,7 +106,7 @@ for /f "delims=" %%a in ('powershell -Command "$v = (Get-ItemProperty '%exe_path
     set "fileversion=%%a"
 )
 
-:: update executable version here
+:: update game and executable version here
 set LATESTPRODUCTVERSION=2.2
 set LATESTFILEVERSION=3.0.78.41888
 
@@ -115,8 +115,8 @@ echo Expected version: %LATESTPRODUCTVERSION% (%LATESTFILEVERSION%)
 echo. 
 
 :: if not the current game version, yell at the user and deploy R.A.B.I.D.S.
-if not "!productversion!"=="%LATESTPRODUCTVERSION%" (
-  echo Please update the game before proceeding. The most recent game version is 2.2 with the executable version %LATESTPRODUCTVERSION%
+if not "!fileversion!"=="%LATESTFILEVERSION%" (
+  echo Please update the game before proceeding. The most recent game version is %LATESTPRODUCTVERSION% with the executable version %LATESTFILEVERSION%
   echo.
   echo Deploying Roving Autonomous Bartmoss Interface Drones....
   FOR /L %%S IN (10, -1, 1) DO (
