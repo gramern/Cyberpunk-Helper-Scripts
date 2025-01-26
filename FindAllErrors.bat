@@ -107,8 +107,8 @@ for /f "delims=" %%a in ('powershell -Command "$v = (Get-ItemProperty '%exe_path
 )
 
 :: update game and executable version here
-set LATESTPRODUCTVERSION=2.2
-set LATESTFILEVERSION=3.0.78.41888
+set LATESTPRODUCTVERSION=2.21
+set LATESTFILEVERSION=3.0.78.57301
 
 echo Detected game version: !productversion! (!fileversion!)
 echo Expected version: %LATESTPRODUCTVERSION% (%LATESTFILEVERSION%)
